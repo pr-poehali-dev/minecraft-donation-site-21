@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import PaymentDialog from "@/components/PaymentDialog";
+import { Toaster } from "@/components/ui/toaster";
 
 const donatPackages = [
   {
@@ -55,6 +58,17 @@ const donatPackages = [
 ];
 
 export default function Index() {
+  const [paymentDialog, setPaymentDialog] = useState<{
+    open: boolean;
+    packageId: string;
+    packageName: string;
+    packagePrice: string;
+  }>({ open: false, packageId: '', packageName: '', packagePrice: '' });
+
+  const openPayment = (id: string, name: string, price: string) => {
+    setPaymentDialog({ open: true, packageId: id, packageName: name, packagePrice: price });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-card">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent"></div>
@@ -117,6 +131,7 @@ export default function Index() {
                   </div>
 
                   <Button 
+                    onClick={() => openPayment(pkg.name.toLowerCase(), pkg.name, pkg.price)}
                     className={`w-full bg-gradient-to-r ${pkg.color} hover:opacity-90 text-white font-bold py-6 text-lg border-0 shadow-lg transition-all hover:shadow-xl hover:scale-105`}
                   >
                     Купить {pkg.name}
@@ -147,6 +162,15 @@ export default function Index() {
           </div>
         </section>
       </div>
+
+      <PaymentDialog
+        open={paymentDialog.open}
+        onOpenChange={(open) => setPaymentDialog({ ...paymentDialog, open })}
+        packageId={paymentDialog.packageId}
+        packageName={paymentDialog.packageName}
+        packagePrice={paymentDialog.packagePrice}
+      />
+      <Toaster />
     </div>
   );
 }

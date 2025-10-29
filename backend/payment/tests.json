@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "name": "Create payment with valid data",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "package_id": "vip",
+        "payment_method": "stripe",
+        "email": "player@example.com",
+        "minecraft_username": "Steve123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "payment_url": "string",
+        "order_id": "string",
+        "package": "string",
+        "amount": "number"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Reject invalid package ID",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "package_id": "invalid",
+        "payment_method": "stripe",
+        "email": "player@example.com",
+        "minecraft_username": "Steve123"
+      },
+      "expectedStatus": 400,
+      "bodyMatcher": "partial"
+    }
+  ]
+}
